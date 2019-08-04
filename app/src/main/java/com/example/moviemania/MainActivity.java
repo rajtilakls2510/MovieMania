@@ -48,8 +48,12 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(username.getText().toString().equals("")|| password.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this, "Fields are empty", Toast.LENGTH_SHORT).show();
+                }
+                else{
                 progress.setVisibility(View.VISIBLE);
-                getToken();
+                getToken();}
             }
         });
         signUp.setOnClickListener(new View.OnClickListener() {
