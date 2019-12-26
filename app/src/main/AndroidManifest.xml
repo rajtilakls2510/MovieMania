@@ -12,22 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AccountActivity"></activity>
-        <activity android:name=".SearchActivity" />
-        <activity android:name=".CompanyActivity" />
-        <activity android:name=".EpisodeDetailsActivity" />
-        <activity android:name=".SeasonDetailsActivity" />
-        <activity android:name=".PeopleDetailsActivity" />
-        <activity android:name=".TVDetailsActivity" />
-        <activity android:name=".DetailsActivity" />
+        <activity android:name=".Activities.AccountActivity"></activity>
+        <activity android:name=".Activities.SearchActivity" />
+        <activity android:name=".Activities.CompanyActivity" />
+        <activity android:name=".Activities.EpisodeDetailsActivity" />
+        <activity android:name=".Activities.SeasonDetailsActivity" />
+        <activity android:name=".Activities.PeopleDetailsActivity" />
+        <activity android:name=".Activities.TVDetailsActivity" />
+        <activity android:name=".Activities.DetailsActivity" />
         <activity
-            android:name=".MovieActivity"/>
+            android:name=".Activities.MovieActivity"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
