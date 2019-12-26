@@ -47,58 +47,63 @@ public class PopularFragment extends Fragment {
         recycle1=view.findViewById(R.id.recycle3);
         progressBar=view.findViewById(R.id.moviePopularProgress);
         progressBar.setVisibility(View.VISIBLE);
-        getGenres(container);
-        String url="https://api.themoviedb.org/3/movie/popular?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US&page=1";
-        StringRequest stringRequest=new StringRequest(StringRequest.Method.GET, url, new Response.Listener<String>() {
+        getGenres(container, new UpcomingFragment.GenreRetrieveCallback() {
             @Override
-            public void onResponse(String response) {
-                try {
+            public void retrieveGenres() {
+                String url="https://api.themoviedb.org/3/movie/popular?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US&page=1";
+                StringRequest stringRequest=new StringRequest(StringRequest.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
 
-                    JSONObject parentJson=new JSONObject(response);
-                    JSONArray result=parentJson.getJSONArray("results");
-                    for(int i=0;i<20;i++){
+                            JSONObject parentJson=new JSONObject(response);
+                            JSONArray result=parentJson.getJSONArray("results");
+                            for(int i=0;i<20;i++){
 
-                        Films film1=new Films();
-                        film1.setTitle(result.getJSONObject(i).getString("title"));
-                        film1.setID(result.getJSONObject(i).getString("id"));
-                        film1.setPoster("https://image.tmdb.org/t/p/w500/"+result.getJSONObject(i).getString("poster_path"));
-                        film1.setRating(result.getJSONObject(i).getString("vote_average")+"/10.0");
-                        film1.setReleaseDate(result.getJSONObject(i).getString("release_date"));
-                        film1.setInfoType("movie");
-                        String genre="";
-                        JSONArray genre_movie=result.getJSONObject(i).getJSONArray("genre_ids");
-                        for(int j=0;j<genre_movie.length();j++){
-                            try{genre=genre+genreName.get(genreID.indexOf(genre_movie.getString(j)))+", ";}
-                            catch (Exception e){}
+                                Films film1=new Films();
+                                film1.setTitle(result.getJSONObject(i).getString("title"));
+                                film1.setID(result.getJSONObject(i).getString("id"));
+                                film1.setPoster("https://image.tmdb.org/t/p/w500/"+result.getJSONObject(i).getString("poster_path"));
+                                film1.setRating(result.getJSONObject(i).getString("vote_average")+"/10.0");
+                                film1.setReleaseDate(result.getJSONObject(i).getString("release_date"));
+                                film1.setInfoType("movie");
+                                String genre="";
+                                JSONArray genre_movie=result.getJSONObject(i).getJSONArray("genre_ids");
+                                for(int j=0;j<genre_movie.length();j++){
+                                    try{genre=genre+genreName.get(genreID.indexOf(genre_movie.getString(j)))+", ";}
+                                    catch (Exception e){}
+                                }
+                                try{genre=genre.substring(0,genre.length()-2);}
+                                catch (Exception e){}
+                                film1.setGenres(genre);
+                                film.add(film1);
+
+                            }
+                            recyclerAdapter=new RecyclerAdapter(film);
+                            recycle1.setLayoutManager(new LinearLayoutManager(getContext()));
+                            recycle1.setAdapter(recyclerAdapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        try{genre=genre.substring(0,genre.length()-2);}
-                        catch (Exception e){}
-                        film1.setGenres(genre);
-                        film.add(film1);
-
                     }
-                    recyclerAdapter=new RecyclerAdapter(film);
-                    recycle1.setLayoutManager(new LinearLayoutManager(getContext()));
-                    recycle1.setAdapter(recyclerAdapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(container.getContext(), "Slow Internet connection", Toast.LENGTH_SHORT).show();
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(container.getContext(), "Slow Internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                if(genreID.size()>0){
+                    RequestQueue requestQueue= Volley.newRequestQueue(container.getContext());
+                    requestQueue.add(stringRequest);
+                    progressBar.setVisibility(View.GONE);
+                    film.clear();}
             }
         });
-        if(genreID.size()>0){
-        RequestQueue requestQueue= Volley.newRequestQueue(container.getContext());
-        requestQueue.add(stringRequest);
-        progressBar.setVisibility(View.GONE);
-        film.clear();}
+
         return view;
     }
-    public void getGenres(final ViewGroup container) {
+    public void getGenres(final ViewGroup container, final UpcomingFragment.GenreRetrieveCallback genreRetrieveCallback) {
         String url1 = "https://api.themoviedb.org/3/genre/movie/list?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US";
         StringRequest stringRequest = new StringRequest(StringRequest.Method.GET, url1, new Response.Listener<String>() {
             @Override
@@ -110,6 +115,7 @@ public class PopularFragment extends Fragment {
                         genreID.add(genres.getJSONObject(i).getString("id"));
                         genreName.add(genres.getJSONObject(i).getString("name"));
                     }
+                    genreRetrieveCallback.retrieveGenres();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
