@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.moviemania.Models.Films;
+import com.example.moviemania.Others.GenreRetrieveCallback;
 import com.example.moviemania.R;
 import com.example.moviemania.Adapters.RecyclerAdapter;
 
@@ -47,7 +48,7 @@ public class PopularFragment extends Fragment {
         recycle1=view.findViewById(R.id.recycle3);
         progressBar=view.findViewById(R.id.moviePopularProgress);
         progressBar.setVisibility(View.VISIBLE);
-        getGenres(container, new UpcomingFragment.GenreRetrieveCallback() {
+        getGenres(container, new GenreRetrieveCallback() {
             @Override
             public void retrieveGenres() {
                 String url="https://api.themoviedb.org/3/movie/popular?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US&page=1";
@@ -103,7 +104,7 @@ public class PopularFragment extends Fragment {
 
         return view;
     }
-    public void getGenres(final ViewGroup container, final UpcomingFragment.GenreRetrieveCallback genreRetrieveCallback) {
+    public void getGenres(final ViewGroup container, final GenreRetrieveCallback genreRetrieveCallback) {
         String url1 = "https://api.themoviedb.org/3/genre/movie/list?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US";
         StringRequest stringRequest = new StringRequest(StringRequest.Method.GET, url1, new Response.Listener<String>() {
             @Override

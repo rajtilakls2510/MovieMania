@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.moviemania.Others.AccountDetails;
 import com.example.moviemania.Models.Films;
+import com.example.moviemania.Others.GenreRetrieveCallback;
 import com.example.moviemania.R;
 import com.example.moviemania.Adapters.RecyclerAdapter;
 
@@ -44,15 +45,20 @@ public class FavTVFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_fav_tv, container, false);
         progressBar=view.findViewById(R.id.favTVProgress);
         progressBar.setVisibility(View.VISIBLE);
         recyclerView=view.findViewById(R.id.favTVRecycle);
-        getGenres(container);
-        getTv(container);
+        getGenres(container, new GenreRetrieveCallback() {
+            @Override
+            public void retrieveGenres() {
+                getTv(container);
+            }
+        });
+
         return view;
     }
     public void getTv(final ViewGroup container){
@@ -107,7 +113,7 @@ public class FavTVFragment extends Fragment {
             favTVList.clear();
         }
     }
-    public void getGenres(final ViewGroup container) {
+    public void getGenres(final ViewGroup container, final GenreRetrieveCallback genreRetrieveCallback) {
         String url1 = "https://api.themoviedb.org/3/genre/tv/list?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US";
         StringRequest stringRequest = new StringRequest(StringRequest.Method.GET, url1, new Response.Listener<String>() {
             @Override
@@ -119,6 +125,7 @@ public class FavTVFragment extends Fragment {
                         genreID.add(genres.getJSONObject(i).getString("id"));
                         genreName.add(genres.getJSONObject(i).getString("name"));
                     }
+                    genreRetrieveCallback.retrieveGenres();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
