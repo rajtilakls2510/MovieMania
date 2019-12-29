@@ -21,7 +21,8 @@
         <activity android:name=".Activities.TVDetailsActivity" />
         <activity android:name=".Activities.DetailsActivity" />
         <activity
-            android:name=".Activities.MovieActivity"/>
+            android:name=".Activities.MovieActivity"
+            android:screenOrientation="portrait"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
