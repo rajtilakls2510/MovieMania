@@ -2,7 +2,7 @@
 
 <img src="https://github.com/rajtilakls2510/MovieMania/blob/master/demo_image.png">
 
-Demo Video Link:  
+Demo Video Link:  https://youtu.be/v1-35K3XLr4
 
 Link to download apk: https://github.com/rajtilakls2510/MovieMania/blob/master/moviemania.apk
 
